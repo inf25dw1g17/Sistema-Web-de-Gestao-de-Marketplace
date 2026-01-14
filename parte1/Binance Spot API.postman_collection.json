@@ -1,0 +1,314 @@
+{
+	"info": {
+		"_postman_id": "569032cf-6840-468e-9959-e70047fed3eb",
+		"name": "Binance Spot API",
+		"description": "Coleção de endpoints da Binance Spot API para demonstração e estudo.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49091595",
+		"_collection_link": "https://a048063-8379579.postman.co/workspace/a048063's-Workspace~4484e47b-a268-415a-818b-912e07e7ee1a/collection/49091595-569032cf-6840-468e-9959-e70047fed3eb?action=share&source=collection_link&creator=49091595"
+	},
+	"item": [
+		{
+			"name": "Ping API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v3/ping",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Exchange Info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v3/exchangeInfo",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"exchangeInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Preço BTC/USDT",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v3/ticker/price?symbol=BTCUSDT",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"ticker",
+						"price"
+					],
+					"query": [
+						{
+							"key": "symbol",
+							"value": "BTCUSDT"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Todos os preços",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v3/ticker/price",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"ticker",
+						"price"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Informações de Conta (Privado)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const apiSecret = \"ZvLXRV87tqsq2Ae5JWOTfqJOdzBpZ7jKzzMt1k5QHdo8Qv5Xl5hVX7BNh13zle0R\";\r",
+							"\r",
+							"const timestamp = Date.now();\r",
+							"pm.environment.set(\"timestamp\", timestamp);\r",
+							"\r",
+							"const queryString = `timestamp=${timestamp}`;\r",
+							"\r",
+							"const signature = CryptoJS.HmacSHA256(\r",
+							"  queryString,\r",
+							"  apiSecret\r",
+							").toString(CryptoJS.enc.Hex);\r",
+							"\r",
+							"pm.environment.set(\"signature\", signature);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-MBX-APIKEY",
+						"value": "{{apiKey}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/v3/account?timestamp={{timestamp}}&signature={{signature}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"account"
+					],
+					"query": [
+						{
+							"key": "timestamp",
+							"value": "{{timestamp}}"
+						},
+						{
+							"key": "signature",
+							"value": "{{signature}}"
+						}
+					]
+				},
+				"description": "Este endpoint requer autenticação e assinatura HMAC SHA256."
+			},
+			"response": []
+		},
+		{
+			"name": "Criar User Data Stream (listenKey)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"try {",
+							"    const json = pm.response.json();",
+							"    if (json && json.listenKey) {",
+							"        pm.collectionVariables.set('listenKey', json.listenKey);",
+							"        pm.environment.set('listenKey', json.listenKey);",
+							"    }",
+							"} catch (e) {",
+							"    // ignore parse errors",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-MBX-APIKEY",
+						"value": "{{apiKey}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/v3/userDataStream",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"userDataStream"
+					]
+				},
+				"description": "Cria um listenKey para o User Data Stream. Requer API Key (X-MBX-APIKEY)."
+			},
+			"response": []
+		},
+		{
+			"name": "Renovar User Data Stream (keepalive)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-MBX-APIKEY",
+						"value": "{{apiKey}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/v3/userDataStream?listenKey={{listenKey}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"userDataStream"
+					],
+					"query": [
+						{
+							"key": "listenKey",
+							"value": "{{listenKey}}"
+						}
+					]
+				},
+				"description": "Renova o listenKey existente (keepalive). Requer API Key."
+			},
+			"response": []
+		},
+		{
+			"name": "Fechar User Data Stream",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User Data Stream fechado\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"  pm.environment.unset(\"listenKey\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-MBX-APIKEY",
+						"value": "{{apiKey}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/v3/userDataStream?listenKey={{listenKey}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v3",
+						"userDataStream"
+					],
+					"query": [
+						{
+							"key": "listenKey",
+							"value": "{{listenKey}}"
+						}
+					]
+				},
+				"description": "Termina o User Data Stream para o listenKey. Requer API Key."
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://api.binance.com",
+			"type": "string"
+		},
+		{
+			"key": "apiKey",
+			"value": "<A_TUA_API_KEY>",
+			"type": "string"
+		},
+		{
+			"key": "listenKey",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
