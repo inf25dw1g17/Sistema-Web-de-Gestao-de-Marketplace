@@ -1,0 +1,123 @@
+{
+  "info": {
+    "name": "Parte 2 - Biblioteca API",
+    "_postman_id": "b6c7c9a6-2b3e-4c0e-9c7a-123456789abc",
+    "description": "Coleção Postman da Parte 2 - Biblioteca (Authors, Publishers, Categories, Books)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/health"
+      }
+    },
+    {
+      "name": "Authors",
+      "item": [
+        {
+          "name": "GET all authors",
+          "request": { "method": "GET", "url": "http://localhost:3000/api/authors" }
+        },
+        {
+          "name": "GET author by id",
+          "request": { "method": "GET", "url": "http://localhost:3000/api/authors/1" }
+        },
+        {
+          "name": "POST author",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Fernando Pessoa\",\n  \"bio\": \"Poeta\"\n}"
+            },
+            "url": "http://localhost:3000/api/authors"
+          }
+        },
+        {
+          "name": "PUT author",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Fernando Pessoa\",\n  \"bio\": \"Poeta e escritor\"\n}"
+            },
+            "url": "http://localhost:3000/api/authors/1"
+          }
+        },
+        {
+          "name": "DELETE author",
+          "request": { "method": "DELETE", "url": "http://localhost:3000/api/authors/1" }
+        }
+      ]
+    },
+    {
+      "name": "Publishers",
+      "item": [
+        {
+          "name": "GET all publishers",
+          "request": { "method": "GET", "url": "http://localhost:3000/api/publishers" }
+        },
+        {
+          "name": "GET publishers by country",
+          "request": { "method": "GET", "url": "http://localhost:3000/api/publishers?country=Portugal" }
+        },
+        {
+          "name": "POST publisher",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Porto Editora\",\n  \"country\": \"Portugal\"\n}" },
+            "url": "http://localhost:3000/api/publishers"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "GET all categories",
+          "request": { "method": "GET", "url": "http://localhost:3000/api/categories" }
+        },
+        {
+          "name": "POST category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Romance\"\n}" },
+            "url": "http://localhost:3000/api/categories"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Books",
+      "item": [
+        {
+          "name": "GET all books",
+          "request": { "method": "GET", "url": "http://localhost:3000/api/books" }
+        },
+        {
+          "name": "GET books by author",
+          "request": { "method": "GET", "url": "http://localhost:3000/api/books?authorId=1" }
+        },
+        {
+          "name": "POST book",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Livro Teste\",\n  \"isbn\": \"TESTE-123\",\n  \"published_year\": 2026,\n  \"author_id\": 1,\n  \"publisher_id\": 1\n}"
+            },
+            "url": "http://localhost:3000/api/books"
+          }
+        }
+      ]
+    }
+  ]
+}
